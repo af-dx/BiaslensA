@@ -1,0 +1,14 @@
+# Starter dependencies; record tested versions after environment setup.
+numpy
+pandas
+matplotlib
+seaborn
+scikit-learn
+datasets
+jupyterlab
+ipykernel
+joblib
+streamlit
+
+# Add TensorFlow/Keras in the training environment after confirming
+# the course requirements and Python/platform compatibility.

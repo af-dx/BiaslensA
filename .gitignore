@@ -1,0 +1,25 @@
+# Python / notebooks
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+.DS_Store
+
+# Local datasets / trained artifacts
+data/
+*.joblib
+*.pkl
+*.pickle
+*.h5
+*.keras
+*.pt
+*.pth
+models/*
+!models/.gitkeep
+
+# Local tools
+.streamlit/secrets.toml
