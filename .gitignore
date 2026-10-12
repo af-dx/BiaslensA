@@ -11,14 +11,12 @@ venv/
 
 # Local datasets / trained artifacts
 data/
-*.joblib
-*.pkl
+
 *.pickle
 *.h5
 *.keras
 *.pt
 *.pth
-models/*
 !models/.gitkeep
 
 # Local tools
