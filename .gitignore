@@ -9,15 +9,18 @@ venv/
 !.env.example
 .DS_Store
 
-# Local datasets / trained artifacts
+# Local datasets
 data/
 
+# Optional / large model formats
 *.pickle
 *.h5
 *.keras
 *.pt
 *.pth
-!models/.gitkeep
+
+# Generated evaluation figures
+confusion_matrix_test.png
 
 # Local tools
 .streamlit/secrets.toml
