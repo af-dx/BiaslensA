@@ -139,3 +139,21 @@ To strictly prevent **Data Leakage**, a two-stage stratified partitioning strate
 1. **Pipeline Integrity:** The `Dummy Classifier` results (~0.51) confirm zero dataset bias and a reliable splitting methodology.
 2. **Linear Baseline Strength:** `TF-IDF + Logistic Regression` provided a strong baseline (`ROC-AUC: 0.7861`), demonstrating that linear models offer fast and high-baseline performance.
 3. **LSTM Superiority:** The `Small LSTM` achieved the highest performance across all key evaluation metrics (`ROC-AUC: 0.7918`, `Accuracy: 0.7320`, and `F1-Score: 0.7251`), proving its capability to capture contextual word order and sequential relationships effectively.
+---------------------------------------------------------------------------------
+### 📝 Day 3 Progress & Summary
+
+#### 1. Overfitting & Model Comparison Framework
+- **Unified Overfitting Code**: Combined the overfitting checks for all models (**LinearSVC**, **Small LSTM**, and **Logistic Regression**) into a single, clean code block to generate a comprehensive comparison table (Accuracy, F1-Score, and ROC-AUC).
+- **Performance & Gap Analysis**:
+  - **LinearSVC**: Demonstrated exceptional stability with almost zero overfitting ($\text{Gap} \approx -0.0048$).
+  - **Logistic Regression**: Showed a very safe and acceptable minor gap ($\text{Gap} \approx 0.0920$).
+  - **Small LSTM**: Exhibited the highest gap ($\text{Gap} \approx 0.1105$) due to neural network behavior, which was well-controlled using Dropout and Early Stopping.
+
+#### 2. Error Analysis (Track D)
+- **Error Classification**: Evaluated validation set predictions, resulting in 711 correct predictions, 154 False Negatives, and 113 False Positives.
+- **Root Cause Documentation**:
+  - **False Positives**: Safe texts incorrectly flagged as biased due to isolated keywords appearing within a neutral context.
+  - **False Negatives**: Subtle or implicit bias missed by the model in certain samples.
+
+#### 3. Model Persistence & Deployment Prep
+- **Saving Artifacts**: Successfully saved all trained model pipelines and tokenizers to disk in `.joblib` and `.pkl` formats, ensuring they are fully ready for quick loading during the Demo Day.
