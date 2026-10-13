@@ -46,9 +46,8 @@ This may indicate annotation ambiguity and should be reviewed.
 - Main metric: F1-score
 - Supporting metrics: Precision, Recall, and Confusion Matrix
 
-## Notes for the Presentation
-- Include the label distribution plot.
-- Include the text length distribution plot.
-- Include the text length by label plot.
-- Discuss duplicate-text handling and potential label ambiguity.
-- Check that identical texts do not cross dataset splits.
+### Final Model Selection
+
+Based on the validation results, Tuned Logistic Regression with TF-IDF and **C = 1** was selected as the final Logistic Regression configuration. It achieved a ROC-AUC of **0.7902** and a PR-AUC of **0.7912**, slightly outperforming LSTM v3 on both ranking metrics.
+
+Although LSTM v3 achieved higher accuracy and F1-score, Logistic Regression was retained as the selected configuration due to its stronger ROC-AUC and PR-AUC performance. The final model choice will be further assessed using the held-out test set.
