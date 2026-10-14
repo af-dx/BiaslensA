@@ -1,7 +1,8 @@
 ## python -m streamlit run app/streamlit_app.py
 
 
-"""BiasLens: user-facing text bias screening dashboard."""
+"""BiasLens — Interactive Text Bias Detection Dashboard."""
+
 import json
 import sys
 from pathlib import Path
@@ -13,12 +14,13 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from src.predict import analyze_text  # noqa: E402
+from src.predict import analyze_text
 
 st.set_page_config(
     page_title="BiasLens | See beyond the words",
     page_icon="🔎",
     layout="wide",
+    initial_sidebar_state="expanded",
 )
 
 BIAS = {
@@ -60,227 +62,259 @@ st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap');
 
-:root {color-scheme:light;}
+:root { color-scheme: light; }
 
 .stApp {
-    background:#F8F9FE;
-    color:#293650;
-    font-family:'DM Sans',sans-serif;
+    background: #F8F9FE;
+    color: #293650;
+    font-family: 'DM Sans', sans-serif;
 }
 
-h1,h2,h3 {
-    font-family:'Manrope',sans-serif!important;
-    letter-spacing:-.04em;
+h1, h2, h3 {
+    font-family: 'Manrope', sans-serif !important;
+    letter-spacing: -.04em;
 }
 
-[data-testid="stHeader"] {background:transparent;}
+[data-testid="stHeader"] {
+    background: transparent;
+}
 
 .block-container {
-    max-width:1210px;
-    padding-top:1.65rem;
-    padding-bottom:3rem;
+    max-width: 1210px;
+    padding-top: 1.65rem;
+    padding-bottom: 3rem;
 }
 
 /* Sidebar */
 
 [data-testid="stSidebar"] {
-    background:linear-gradient(
-        160deg,#F0EAFF,#F7F3FF 65%,#F8F9FE
-    )!important;
-    border-right:1px solid #DDD7EF!important;
+    background: linear-gradient(
+        160deg, #F0EAFF, #F7F3FF 65%, #F8F9FE
+    ) !important;
+    border-right: 1px solid #DDD7EF !important;
+    height: 100dvh !important;
 }
 
 [data-testid="stSidebar"] [data-testid="stSidebarContent"] {
-    overflow-y:auto;
-    max-height:100dvh;
+    overflow-y: auto !important;
+    max-height: 100dvh;
 }
 
-[data-testid="stSidebar"] :is(p,label,small),
+[data-testid="stSidebar"] :is(p, label, small),
 [data-testid="stSidebar"] [role="radiogroup"] label p {
-    color:#36415D!important;
-    -webkit-text-fill-color:#36415D!important;
-    opacity:1!important;
+    color: #36415D !important;
+    -webkit-text-fill-color: #36415D !important;
+    opacity: 1 !important;
 }
 
 [data-testid="stSidebar"] [data-testid="stCaptionContainer"] p {
-    color:#71809E!important;
-    -webkit-text-fill-color:#71809E!important;
+    color: #71809E !important;
+    -webkit-text-fill-color: #71809E !important;
 }
 
 [data-testid="stSidebar"] [role="radiogroup"] label {
-    padding:9px 11px!important;
-    border-radius:12px!important;
+    padding: 9px 11px !important;
+    border-radius: 12px !important;
 }
 
 [data-testid="stSidebar"] [role="radiogroup"] label:has(input:checked) {
-    background:#E6DCFB!important;
-    border:1px solid #D7C8F5!important;
+    background: #E6DCFB !important;
+    border: 1px solid #D7C8F5 !important;
 }
 
 [data-testid="stSidebar"] [data-testid="stExpander"] {
-    background:#FFFFFFA8!important;
-    border:1px solid #E1D9F2!important;
-    border-radius:12px!important;
+    background: #FFFFFFA8 !important;
+    border: 1px solid #E1D9F2 !important;
+    border-radius: 12px !important;
 }
 
-/* Inputs */
+/* Inputs and buttons */
 
 [data-testid="stTextArea"] textarea {
-    background:#FFF!important;
-    color:#293650!important;
-    border:1px solid #DCE3F0!important;
-    border-radius:13px!important;
+    background: #FFFFFF !important;
+    color: #293650 !important;
+    border: 1px solid #DCE3F0 !important;
+    border-radius: 13px !important;
 }
 
 .stButton button,
 [data-testid="stDownloadButton"] button {
-    border-radius:12px!important;
-    border:1px solid #DFE4F1!important;
-    background:#FFF;
-    color:#35415D;
+    border-radius: 12px !important;
+    border: 1px solid #DFE4F1 !important;
+    background: #FFFFFF;
+    color: #35415D;
 }
 
 .stButton button[kind="primary"],
 [data-testid="stFormSubmitButton"] button[kind="primary"] {
-    background:#876CD8!important;
-    color:white!important;
-    border:0!important;
-    font-weight:700;
+    background: #876CD8 !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    font-weight: 700;
+}
+
+/* Dashboard text contrast */
+
+[data-testid="stMetricLabel"],
+[data-testid="stMetricLabel"] *,
+[data-testid="stMetric"] label {
+    color: #53627D !important;
+    -webkit-text-fill-color: #53627D !important;
+    opacity: 1 !important;
+}
+
+[data-testid="stMetricValue"],
+[data-testid="stMetricValue"] * {
+    color: #293650 !important;
+    -webkit-text-fill-color: #293650 !important;
+    opacity: 1 !important;
+}
+
+[data-testid="stMetric"] {
+    background: #FFFFFF;
+    border: 1px solid #E3E2F2;
+    border-radius: 14px;
+    padding: 16px 20px;
+}
+
+.js-plotly-plot .xtick text,
+.js-plotly-plot .ytick text {
+    fill: #53627D !important;
 }
 
 /* Branding */
 
 .bl-logo {
-    font:800 1.55rem 'Manrope',sans-serif;
-    color:#27324D;
-    letter-spacing:-.06em;
+    font: 800 1.55rem 'Manrope', sans-serif;
+    color: #27324D;
+    letter-spacing: -.06em;
 }
 
 .bl-logo span,
 .bl-hero h1 span {
-    color:#876BD3;
+    color: #876BD3;
 }
 
 .bl-hero {
-    padding:30px 35px;
-    background:linear-gradient(
-        115deg,#F0EBFF,#FAF8FF 60%,#EDF9F7
+    padding: 30px 35px;
+    background: linear-gradient(
+        115deg, #F0EBFF, #FAF8FF 60%, #EDF9F7
     );
-    border:1px solid #E7DFFC;
-    border-radius:21px;
-    margin-bottom:25px;
+    border: 1px solid #E7DFFC;
+    border-radius: 21px;
+    margin-bottom: 25px;
 }
 
 .bl-kicker {
-    color:#856ED0;
-    font-size:.69rem;
-    font-weight:800;
-    letter-spacing:.15em;
-    margin-bottom:13px;
+    color: #856ED0;
+    font-size: .69rem;
+    font-weight: 800;
+    letter-spacing: .15em;
+    margin-bottom: 13px;
 }
 
 .bl-hero h1 {
-    font:800 clamp(1.95rem,3.4vw,3.1rem) 'Manrope',sans-serif;
-    color:#283450;
-    line-height:1.18;
-    letter-spacing:-.06em;
-    margin:0 0 12px;
+    font: 800 clamp(1.95rem, 3.4vw, 3.1rem) 'Manrope', sans-serif;
+    color: #283450;
+    line-height: 1.18;
+    letter-spacing: -.06em;
+    margin: 0 0 12px;
 }
 
 .bl-hero p {
-    color:#60708B;
-    font-size:1rem;
-    line-height:1.7;
-    max-width:760px;
-    margin:0;
+    color: #60708B;
+    font-size: 1rem;
+    line-height: 1.7;
+    max-width: 760px;
+    margin: 0;
 }
 
 .bl-section {
-    font:800 1.22rem 'Manrope',sans-serif;
-    color:#2B3651;
-    margin:26px 0 6px;
+    font: 800 1.22rem 'Manrope', sans-serif;
+    color: #2B3651;
+    margin: 26px 0 6px;
 }
 
 .bl-sub {
-    font-size:.88rem;
-    color:#77849C;
-    margin-bottom:15px;
+    font-size: .88rem;
+    color: #77849C;
+    margin-bottom: 15px;
 }
 
-/* Pastel Cards */
+/* Pastel cards */
 
 .bl-card {
-    box-sizing:border-box;
-    border:1.5px solid #DBD4F4;
-    border-radius:17px;
-    padding:21px 22px;
-    margin-bottom:14px;
-    min-height:160px;
-    box-shadow:0 5px 19px rgba(53,65,107,.035);
+    box-sizing: border-box;
+    border: 1.5px solid #DBD4F4;
+    border-radius: 17px;
+    padding: 21px 22px;
+    margin-bottom: 14px;
+    min-height: 160px;
+    box-shadow: 0 5px 19px rgba(53, 65, 107, .035);
 }
 
 .bl-card-kicker {
-    font-size:.69rem;
-    font-weight:800;
-    letter-spacing:.12em;
-    margin-bottom:11px;
+    font-size: .69rem;
+    font-weight: 800;
+    letter-spacing: .12em;
+    margin-bottom: 11px;
 }
 
 .bl-card-title {
-    font:800 1.07rem 'Manrope',sans-serif;
-    color:#293650;
-    margin-bottom:8px;
+    font: 800 1.07rem 'Manrope', sans-serif;
+    color: #293650;
+    margin-bottom: 8px;
 }
 
 .bl-card-desc {
-    font-size:.85rem;
-    color:#66758F;
-    line-height:1.65;
+    font-size: .85rem;
+    color: #66758F;
+    line-height: 1.65;
 }
 
 /* Results */
 
 .bl-summary {
-    background:linear-gradient(105deg,#F3EEFF,#F1FAF9);
-    border:1px solid #E5DDF5;
-    border-radius:16px;
-    padding:21px 24px;
-    margin:14px 0;
+    background: linear-gradient(105deg, #F3EEFF, #F1FAF9);
+    border: 1px solid #E5DDF5;
+    border-radius: 16px;
+    padding: 21px 24px;
+    margin: 14px 0;
 }
 
 .bl-summary strong {
-    font:800 1.2rem 'Manrope',sans-serif;
-    color:#293650;
+    font: 800 1.2rem 'Manrope', sans-serif;
+    color: #293650;
 }
 
 .bl-summary p {
-    color:#63718A;
-    font-size:.87rem;
-    margin:8px 0 0;
+    color: #63718A;
+    font-size: .87rem;
+    margin: 8px 0 0;
 }
 
 .bl-score {
-    font:800 1.9rem 'Manrope',sans-serif;
-    color:#293650;
+    font: 800 1.9rem 'Manrope', sans-serif;
+    color: #293650;
 }
 
 .bl-badge {
-    border-radius:20px;
-    padding:6px 10px;
-    font-size:.68rem;
-    font-weight:800;
+    border-radius: 20px;
+    padding: 6px 10px;
+    font-size: .68rem;
+    font-weight: 800;
 }
 
 .bl-bar {
-    height:7px;
-    background:#E9EDF5;
-    border-radius:8px;
-    overflow:hidden;
-    margin:13px 0 9px;
+    height: 7px;
+    background: #E9EDF5;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 13px 0 9px;
 }
 
-@media(max-width:720px) {
-    .bl-hero {padding:23px;}
+@media (max-width: 720px) {
+    .bl-hero { padding: 23px; }
 }
 </style>
 """, unsafe_allow_html=True)
@@ -329,45 +363,69 @@ def set_sample(text):
 def chart(result):
     keys = list(BIAS)
     values = [
-        result["predictions"][key]["probability"]
+        float(result["predictions"][key]["probability"])
         for key in keys
     ]
 
-    fig = go.Figure(go.Bar(
-        x=values,
-        y=[BIAS[key][1] for key in keys],
-        orientation="h",
-        marker_color=[BIAS[key][2] for key in keys],
-        text=[f"{v:.3f}" for v in values],
-        textposition="outside",
-        hovertemplate="%{y}: %{x:.4f}<extra></extra>",
-    ))
+    fig = go.Figure(
+        go.Bar(
+            x=values,
+            y=[BIAS[key][1] for key in keys],
+            orientation="h",
+            marker_color=[BIAS[key][2] for key in keys],
+            text=[f"{value:.3f}" for value in values],
+            textposition="outside",
+            textfont=dict(
+                color="#293650",
+                size=13,
+            ),
+            hovertemplate=(
+                "<b>%{y}</b><br>"
+                "Model score: %{x:.4f}<extra></extra>"
+            ),
+        )
+    )
 
     fig.add_vline(
         x=result["threshold"],
         line_dash="dash",
         line_color="#886FD5",
+        line_width=2,
         annotation_text=f'Threshold {result["threshold"]:.2f}',
+        annotation_font_color="#775CC4",
+        annotation_font_size=12,
+        annotation_position="top right",
     )
 
     fig.update_layout(
-        height=330,
-        margin=dict(l=10, r=40, t=38, b=25),
+        height=335,
+        margin=dict(l=15, r=45, t=45, b=45),
         showlegend=False,
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
-        font=dict(color="#566782"),
+        font=dict(
+            family="DM Sans",
+            color="#53627D",
+            size=13,
+        ),
         xaxis=dict(
             range=[0, 1.08],
             tickvals=[0, .25, .5, .75, 1],
-            gridcolor="#E9EDF6",
-            title="Positive-class model score",
+            tickfont=dict(color="#53627D", size=12),
+            title=dict(
+                text="Positive-class model score",
+                font=dict(color="#53627D", size=12),
+            ),
+            gridcolor="#E1E5F0",
+            zeroline=False,
         ),
         yaxis=dict(
             autorange="reversed",
             showgrid=False,
+            tickfont=dict(color="#36415D", size=13),
         ),
     )
+
     return fig
 
 
@@ -431,7 +489,7 @@ def analyzer():
         st.error(f"The analysis could not be completed: {exc}")
         return
 
-    # Summary
+    # Analysis summary
     section("02 / Analysis results")
 
     detected = result["detected_biases"]
@@ -443,7 +501,7 @@ def analyzer():
 
     detail = (
         "Potential signals: "
-        + ", ".join(BIAS[k][1] for k in detected)
+        + ", ".join(BIAS[key][1] for key in detected)
         + "."
         if detected
         else "No model score reached the selected threshold."
@@ -451,7 +509,8 @@ def analyzer():
 
     st.markdown(
         f'<div class="bl-summary">'
-        f'<strong>{title}</strong><p>{detail}</p></div>',
+        f'<strong>{title}</strong>'
+        f'<p>{detail}</p></div>',
         unsafe_allow_html=True,
     )
 
@@ -460,7 +519,7 @@ def analyzer():
     b.metric("Categories flagged", len(detected))
     c.metric("Decision threshold", f'{result["threshold"]:.2f}')
 
-    # Interactive chart
+    # Interactive bias profile
     graph_col, text_col = st.columns([2, 1], gap="large")
 
     with graph_col:
@@ -484,17 +543,20 @@ def analyzer():
             wrap_lines=True,
         )
 
-    # Detailed Cards
+    # Detailed results
     section(
         "03 / Detailed bias signals",
         "Explore each category separately.",
     )
 
-    for pair in (list(BIAS)[:2], list(BIAS)[2:]):
+    keys = list(BIAS)
+
+    for pair in (keys[:2], keys[2:]):
         for key, col in zip(pair, st.columns(2)):
             with col:
                 name, _, color, description = BIAS[key]
                 item = result["predictions"][key]
+
                 score = float(item["probability"])
                 flagged = item["predicted_label"] == 1
 
@@ -527,9 +589,10 @@ def analyzer():
 
     with st.expander("Developer view · Full JSON response"):
         st.json(result)
+
         st.download_button(
             "Download JSON results",
-            json.dumps(result, indent=2),
+            data=json.dumps(result, indent=2, ensure_ascii=False),
             file_name="biaslens_results.json",
             mime="application/json",
         )
@@ -587,10 +650,13 @@ def insights():
         "Each lens explores a different form of potential bias.",
     )
 
-    for pair in (list(BIAS)[:2], list(BIAS)[2:]):
+    keys = list(BIAS)
+
+    for pair in (keys[:2], keys[2:]):
         for key, col in zip(pair, st.columns(2)):
             with col:
                 name, _, color, description = BIAS[key]
+
                 card(
                     "BIAS CATEGORY",
                     name,
@@ -613,20 +679,22 @@ def about():
     hero(
         "ABOUT BIASLENS",
         "A clearer view of <span>language.</span>",
-        "BiasLens helps you explore possible bias in English "
-        "writing through an intuitive, NLP-powered experience.",
+        "BiasLens makes it easier to recognize potential bias "
+        "in written English through Natural Language Processing.",
     )
 
     section("What is BiasLens?")
 
     card(
-        "NLP-POWERED TEXT ANALYSIS",
-        "Explore language with BiasLens",
-        "Enter text, screen for potential linguistic, gender, "
-        "racial, and text-level bias, and explore the findings "
-        "in an interactive dashboard.",
+        "NLP-POWERED BIAS DETECTION & ANALYSIS",
+        "See beyond the words.",
+        "BiasLens is an NLP-powered tool designed to help users "
+        "identify potential bias in written English text. "
+        "It screens text across four categories: linguistic, "
+        "gender, racial, and text-level bias, and presents "
+        "the results through a clear, interactive dashboard.",
         "#9878E6",
-        height=150,
+        height=170,
     )
 
     section(
@@ -654,8 +722,9 @@ def about():
 
     with st.expander("Technology behind BiasLens"):
         st.write(
-            "Python · NLP · scikit-learn · TF-IDF · "
-            "Logistic Regression · Streamlit · Plotly"
+            "Python · Natural Language Processing (NLP) · "
+            "scikit-learn · TF-IDF · Logistic Regression · "
+            "Streamlit · Plotly"
         )
 
 
@@ -674,6 +743,7 @@ with st.sidebar:
         '<div class="bl-logo">◈ Bias<span>Lens</span></div>',
         unsafe_allow_html=True,
     )
+
     st.caption("SEE BEYOND THE WORDS")
     st.divider()
     st.caption("NAVIGATION")
@@ -712,4 +782,9 @@ with st.sidebar:
     st.caption("Saudi Digital Academy × Le Wagon")
     st.caption("Data Science & AI Bootcamp Project")
 
-{"Text Analyzer": analyzer, "Model Insights": insights, "About": about}[page]()
+if page == "Text Analyzer":
+    analyzer()
+elif page == "Model Insights":
+    insights()
+else:
+    about()
